@@ -53,34 +53,45 @@ python score_cluster/score_cluster.py
 - Generates `score_cluster/score_cluster_output.csv`
 - Each student will be labeled as Low / Mid / High Score
 
-**Step 2 - Attitude Cluster**
+**Step 2 - Attitude Cluster** *(requires Step 1 output)*
 
 ```
 python attitude_cluster/attitude_cluster.py
 ```
 
 - Clusters students based on `Hours_Studied`, `Attendance`, `Motivation_Level`, `Tutoring_Sessions`
+- Each student will be labeled as **Expanding Opportunities / Growing Opportunities / Abundant Opportunities**
+- Joins with `score_cluster_output.csv` via `Student_ID` to compare attitude cluster against Score Cluster
+- Analyzes and concludes whether attitude factors affect a student's exam score
 - Generates `attitude_cluster/attitude_cluster_output.csv`
-- Each student will be labeled as Expanding / Growing / Abundant Opportunities
 
-**Step 3 - Inconvenience Cluster**
+**Step 3 - Inconvenience Cluster** *(requires Step 1 output)*
 
 ```
 python inconvenience_cluster/inconvenience_cluster.py
 ```
 
 - Clusters students based on `Access_to_Resources`, `Internet_Access`, `Teacher_Quality`, `Distance_from_Home`
+- Each student will be labeled as **Inconvenience / Normal / Convenience**
+- Joins with `score_cluster_output.csv` via `Student_ID` to compare inconvenience cluster against Score Cluster
+- Analyzes and concludes whether inconvenience conditions affect a student's exam score
 - Generates `inconvenience_cluster/inconvenience_cluster_output.csv`
-- Each student will be labeled as Inconvenience / Normal / Convenience
 
-**Step 4 - Cross Analysis**
+**Step 4 - Cross Analysis** *(requires Step 1, 2, 3 outputs)*
 
 ```
 python cross_analysis/cross_analysis.py
 ```
 
-- Combines the previous three outputs
-- Compares the impact of attitude and inconvenience conditions on `Exam_Score`
+- Combines Step 2 and Step 3 outputs with Score Cluster
+- Compares attitude vs inconvenience impact on exam score across all cluster combinations:
+  - 🟢 Abundant Opportunities × 🔴 Inconvenience → good attitude but poor conditions
+  - 🔴 Expanding Opportunities × 🟢 Convenience → poor attitude but good conditions
+  - 🟢 Abundant Opportunities × 🟢 Convenience → good attitude and good conditions
+  - 🔴 Expanding Opportunities × 🔴 Inconvenience → poor attitude and poor conditions
+- Key questions answered:
+  - Does good attitude overcome poor conditions, or vice versa?
+  - Which factor — attitude or external conditions — has a greater impact on exam score?
 - Generates `cross_analysis/cross_analysis_output.csv`
 
 ---
